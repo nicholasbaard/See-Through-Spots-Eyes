@@ -1,0 +1,29 @@
+import streamlit as st
+from PIL import Image
+
+# Set the background image
+background_image = Image.open("background.jpg")
+
+# Create a Streamlit app
+
+# Load the header image
+header_image = Image.open("Header3.png")
+
+# Display the header image
+st.image(header_image)
+
+# Create two columns for the videos
+col1, col2 = st.columns(2)
+
+# Display the first video in the first column
+with col1:
+    st.header("What We See")
+    st.video("stars.mp4")
+
+# Display the second video in the second column
+with col2:
+    st.header("What Spot Sees")
+    st.video("stars2.mp4")
+
+footerimage = Image.open("Footer.png")
+st.image(footerimage)
