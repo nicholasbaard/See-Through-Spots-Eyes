@@ -3,6 +3,7 @@ import mediapipe as mp
 from ultralytics import YOLO
 from PIL import Image
 import streamlit as st
+import numpy as np
 
 # Initialize YOLOv8 model for person detection
 model = YOLO("../models/yolov8n-seg.pt")  # Use 'yolov8n-seg.pt' for segmentation
@@ -11,6 +12,7 @@ model.to("cpu")
 # Initialize MediaPipe for pose estimation
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(static_image_mode=True, min_detection_confidence=0.5)
+
 main_landmarks = [
               mp_pose.PoseLandmark.NOSE,
               mp_pose.PoseLandmark.LEFT_EYE,
@@ -77,10 +79,12 @@ def webcam_preview():
             break
 
         # Person detection
-        # frame = cv2.resize(frame, (640, 480))
-        results = model.predict(frame, conf=0.5, verbose = False)
-        # image = results[0].plot()
-        image = frame.copy()
+        # Create a black background image of the same size as the frame
+        black_background = np.zeros_like(frame)
+
+        # Person detection
+        results = model.predict(frame, conf=0.5, verbose=False)
+        image = black_background.copy()
         
         # Iterate through detected objects
         for result in results:
@@ -90,7 +94,7 @@ def webcam_preview():
                     x1, y1, x2, y2 = map(int, box.xyxy[0])
 
                     # Extract the region of interest (ROI) for pose estimation
-                    person_roi = image[y1:y2, x1:x2]
+                    person_roi = frame[y1:y2, x1:x2]
 
                     # Perform pose estimation on the detected person
                     pose_results = pose.process(person_roi)
