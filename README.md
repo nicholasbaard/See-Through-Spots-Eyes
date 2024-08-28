@@ -98,7 +98,15 @@ streamlit run st_pipeline_segmentation.py
 
 ### pose
 
+#### with background
 ```bash
 cd pose
 streamlit run st_pipeline_multi_pose.py
+```
+
+
+#### without background
+```bash
+cd pose
+streamlit run st_pipeline_multi_pose_no_background.py
 ```
